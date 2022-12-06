@@ -53,8 +53,6 @@ if __name__ == "__main__":
     metadata_datapoint{
       type
       country
-      unit
-    }
-  }
 
 }"""
+
