@@ -8,17 +8,20 @@ import db_client
 import Stromzeiten_ENTSOE
 from bson.objectid import ObjectId
 
+YESTERDAY = datetime.datetime.today() - datetime.timedelta(days=1)
+TODAY = datetime.datetime.today()
 
 def get_or_generate_collection(name="solar_generation_1"):
     client = db_client.get_db_client()
     db = client.Stromzeiten
-    collection_create.drop(name=name)
-    collection_create.create(name=name)
+    #collection_create.drop(name=name)
+    #collection_create.create(name=name)
     collection = db[name]
     return collection
 
 
-def run(collection, iterations=50, skew_results=True, country = 'Belgium', type = 'Solar', stardate = '20221001', enddate = '20221127', country_code ='BE'):
+def run(collection, iterations=50, skew_results=True, country = 'Belgium', type = 'Solar', stardate = YESTERDAY, enddate = TODAY, country_code ='BE'):
+    
     completed = 0
     generation = Stromzeiten_ENTSOE.extract_basic_info(stardate, enddate, country_code)
 
@@ -44,6 +47,7 @@ def run(collection, iterations=50, skew_results=True, country = 'Belgium', type 
 if __name__ == "__main__":
     collection = get_or_generate_collection(name="Datapoint")
     run(collection)
+
 
 #"2020-09-23T17:01:00Z"
 """query  {
