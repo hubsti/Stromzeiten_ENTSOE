@@ -12,7 +12,6 @@ load_dotenv()
 
 @lru_cache
 def get_db_client():
-    db_client = MongoClient(os.environ["CONNECTION_STRING"], tls=True,
-                            tlsCertificateKeyFile="X509-cert-551657001718571469.pem")
+    db_client = MongoClient(os.environ["CONNECTION_STRING"])
     logger.warning(db_client)
     return db_client

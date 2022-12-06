@@ -14,13 +14,9 @@ def create(name='solar_generation'):
     db = client.Stromzeiten
     try:
         db.create_collection(
-            name,
-            timeseries={
-                "timeField": "timestamp",
-                "metaField": "metadata",
-                "granularity": "hours"
-            }
+            name
         )
+        print("Connection created successfully")
     except errors.CollectionInvalid as e:
         logger.error(e)
 
@@ -33,6 +29,7 @@ def drop(name='solar_generation'):
     db = client.Stromzeiten
     try:
         db.drop_collection(name)
+        print("Connection dropped")
     except errors.CollectionInvalid as e:
         logger.error(e)
         raise Exception("Cannot continue")
