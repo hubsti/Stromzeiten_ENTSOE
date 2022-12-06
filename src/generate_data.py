@@ -50,9 +50,6 @@ if __name__ == "__main__":
   timeseriesdate(datestart: "2022-11-01" dateend: "2022-11-03")  {
     value
     timestamp
-    metadata_datapoint{
-      type
-      country
 
 }"""
 
