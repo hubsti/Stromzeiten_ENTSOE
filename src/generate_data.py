@@ -49,7 +49,5 @@ if __name__ == "__main__":
 """query  {
   timeseriesdate(datestart: "2022-11-01" dateend: "2022-11-03")  {
     value
-    timestamp
-
 }"""
 
