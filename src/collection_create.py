@@ -39,12 +39,12 @@ def Check_BFA_DB():
     client = db_client.get_db_client()
     db = client.Stromzeiten
     name_cursor = db["Datapoint"].aggregate([
-        {'$group': {'_id': '$timestamp', 'count': {'$sum': 1}}},
+        {'$group': {"_id": { "timestamp": "$timestamp", "metadataid": "$metadataid" }, 'count': {'$sum': 1}}},
         {'$match': {'count': {'$gte': 1}}}
         ])
     for document in name_cursor:
         name = document['_id']
         count = document['count']
-        issue_list.append(str(name)             )
-        print(name, count, "duplicate")
+        issue_list.append(str(name.get("timestamp")))
+        print(str(name.get("timestamp")), count, "duplicate")
     return issue_list
