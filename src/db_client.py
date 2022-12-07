@@ -15,3 +15,6 @@ def get_db_client():
     db_client = MongoClient(os.environ["CONNECTION_STRING"])
     logger.warning(db_client)
     return db_client
+
+
+

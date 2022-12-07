@@ -1,7 +1,6 @@
 from entsoe import EntsoePandasClient
 import pandas as pd
 import matplotlib.pyplot as plt
-from functools import lru_cache
 import os
 import time
 from dotenv import load_dotenv
@@ -9,7 +8,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-@lru_cache
 def extract_basic_info(stardate, enddate, country_code):
 
     client = EntsoePandasClient(api_key=os.environ["API_KEY"])

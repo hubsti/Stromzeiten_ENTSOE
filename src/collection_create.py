@@ -33,3 +33,18 @@ def drop(name='solar_generation'):
     except errors.CollectionInvalid as e:
         logger.error(e)
         raise Exception("Cannot continue")
+
+def Check_BFA_DB():
+    issue_list=[]
+    client = db_client.get_db_client()
+    db = client.Stromzeiten
+    name_cursor = db["Datapoint"].aggregate([
+        {'$group': {'_id': '$timestamp', 'count': {'$sum': 1}}},
+        {'$match': {'count': {'$gte': 1}}}
+        ])
+    for document in name_cursor:
+        name = document['_id']
+        count = document['count']
+        issue_list.append(str(name)             )
+        print(name, count, "duplicate")
+    return issue_list

@@ -8,6 +8,7 @@ import db_client
 import Stromzeiten_ENTSOE
 from bson.objectid import ObjectId
 
+
 YESTERDAY = datetime.datetime.today() - datetime.timedelta(days=1)
 TODAY = datetime.datetime.today()
 
@@ -16,20 +17,22 @@ def get_or_generate_collection(name="solar_generation_1"):
     db = client.Stromzeiten
     #collection_create.drop(name=name)
     #collection_create.create(name=name)
+    duplicates = collection_create.Check_BFA_DB()
     collection = db[name]
-    return collection
+    return collection, duplicates
 
 
-def run(collection, iterations=50, skew_results=True, country = 'Belgium', type = 'Solar', stardate = YESTERDAY, enddate = TODAY, country_code ='BE'):
+def run(collection, duplicates, iterations=50, skew_results=True, country = 'Belgium', type = 'Solar', stardate =YESTERDAY, enddate = TODAY, country_code ='BE'):
     
     completed = 0
     generation = Stromzeiten_ENTSOE.extract_basic_info(stardate, enddate, country_code)
 
     for count, row in enumerate(generation['Solar']):
         dateold = generation.index[count]
-        datenew = dateold.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]
-        datenew = datenew + "Z"
-        print((generation.index[count]), row, dateold)
+        dateold1 = dateold - datetime.timedelta(hours=1)
+        datenew = dateold1.strftime('%Y-%m-%d %H:%M:%S')
+        datenew = datenew
+
         
         data = {
             "metadataid": ObjectId('6378e62ab7eae4ad5d84b912'),
@@ -38,15 +41,20 @@ def run(collection, iterations=50, skew_results=True, country = 'Belgium', type 
             "timestamp": dateold
             #"timestamp": pd.Timestamp(generation.index[count]).timestamp()
         }
-        result = collection.insert_one(data)
-        if result.acknowledged:
+        if (datenew not in duplicates):
+          result = collection.insert_one(data)
+          print((generation.index[count]), row, datenew)
+        else:
+          print(f"{datenew} already exists.")
+          
+        if 'result' in locals() and result.acknowledged:
             completed += 1
+            
     print(f"Added {completed} items.")
 
-
 if __name__ == "__main__":
-    collection = get_or_generate_collection(name="Datapoint")
-    run(collection)
+    collection,duplicates = get_or_generate_collection(name="Datapoint")
+    run(collection, duplicates)
 
 
 #"2020-09-23T17:01:00Z"
