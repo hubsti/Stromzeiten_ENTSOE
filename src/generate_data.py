@@ -65,13 +65,16 @@ def run(collection, duplicates, iterations=50, skew_results=True, country = 'Bel
           }
           if (datenew not in duplicates):
             result = collection.insert_one(data)
+            x = collection.delete_many({'value': 'NaN'})
+
+            print(x.deleted_count, " documents deleted.")
             print((generation.index[count]), row, datenew)
           else:
             print(f"{datenew} already exists.")
             
           if 'result' in locals() and result.acknowledged:
               completed += 1
-              
+   
       print(f"Added {completed} items.")
 
 if __name__ == "__main__":
