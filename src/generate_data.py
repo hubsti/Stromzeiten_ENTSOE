@@ -60,7 +60,8 @@ def run(collection, duplicates, iterations=50, skew_results=True, country = 'Bel
               "metadataid": ObjectId(str(gen_type['_id']["$oid"])),
               "postedById": ObjectId('637912d934603726adcbc31c'),
               "value": row,
-              "timestamp": dateold
+              "timestamp": dateold,
+              "country": country
               #"timestamp": pd.Timestamp(generation.index[count]).timestamp()
           }
           if (datenew not in duplicates):
